@@ -1,0 +1,10 @@
+#!/usr/bin/python
+
+import servermanager
+
+
+
+
+
+manager  = servermanager.ServerManager()
+manager.parse_args()
