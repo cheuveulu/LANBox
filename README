@@ -20,7 +20,7 @@ Install django libs on ubuntu:
   sudo aptitude install python-django
 
 Clone repository
-   git clone http://cheuveulu@github.com/cheuveulu/LANBox.git
+   git clone http://github.com/cheuveulu/LANBox.git
 Got to codadmin folder
    cd LANBox/codadmin
 
