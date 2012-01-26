@@ -1,0 +1,3 @@
+*.pyc
+codadmin.db
+.*.sw*
