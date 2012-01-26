@@ -1,0 +1,20 @@
+    <div class="server">
+       <div class="game_icon"><img src="{{server.game.icon.url}}" /></div>
+       <div class="server_commands">
+            <button type="button" class="but_start" onclick='run_cmd(this,{{server.id}}, "start")'></button>
+            <button type="button" class="but_restart" onclick='run_cmd(this,{{server.id}}, "restart")'></button>
+            <button type="button" class="but_stop" onclick='run_cmd(this,{{server.id}}, "stop")'></button>
+        </div>
+        <div class="server_name"> 
+             <a href="/server/{{server.id}}/">{{server.name}}</a>
+        </div>
+        <div class="server_info">
+            IP : {{server.ip}} <br />
+            Port : {{server.port}} <br />
+            Mod : {{server.fs_game}} <br />
+            Connect : \connect {{server.ip}}:{{server.port}}; {% if  server.password  %}password {{server.password}}{% endif %}
+     
+        </div>
+
+
+    </div>

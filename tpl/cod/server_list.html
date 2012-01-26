@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ block.super }}
+<script src="{{STATIC_URL}}cod.js"></script>
+{% endblock %}
+
+{% block content %}
+    <div id="server_list">
+        {% for server in server_list %}
+            {% include "cod/server_list_minimal.html" %}
+        {% empty %}
+          <p>No server available</p>
+        {% endfor %}
+    </div>
+{% endblock %}

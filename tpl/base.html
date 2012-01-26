@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}base.css" />
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}sticky.min.css" />
+        <script src="{{STATIC_URL}}jquery-1.7.1.min.js"></script>
+        <script src="{{STATIC_URL}}sticky.min.js"></script>
+        {% block head %}{% endblock %}
+        <title>{% block title %}LAN BOX{% endblock %}</title>
+    </head>
+    <body>
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </body>
+</html>

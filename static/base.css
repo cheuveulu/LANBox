@@ -1,0 +1,64 @@
+body
+{
+    background: none repeat scroll 0 0 #234F32;
+    font-family: Verdana, Arial;
+}
+
+.server
+{
+    background: none repeat scroll 0 0 #E0FFB8;
+    padding: 0.3em 0.4em;
+    margin: 0.3em 0.4em;
+    border-color: #94DA3A;
+    border-style: solid;
+    border-width: 1px 0;
+    width:60%
+}
+
+a 
+{
+    color: #234F32;
+}
+
+.server_commands
+{
+    float: right;
+}
+
+.but_start
+{
+    background-image: url("/static/images/start.png");
+}
+
+.but_restart
+{
+    background-image: url("/static/images/restart.png");
+}
+
+.but_stop
+{
+    background-image: url("/static/images/stop.png");
+}
+
+.ajax-loading
+{
+    background-image: url("/static/images/ajax-loading.gif");
+}
+
+
+.server_commands button
+{
+    width:22px;
+    height:22px;
+    border-style:none;
+    background-color: transparent;
+    background-repeat: no-repeat;
+}
+
+
+.game_icon img
+{
+    border-color: #94DA3A;
+    border-style: solid;
+    border-width: 1px;
+}
