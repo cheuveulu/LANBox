@@ -1,1 +1,31 @@
 CoD servers management.
+
+cli - Old python command-line only script.
+
+codadmin - new Webui based on Django
+
+------------
+    DOC
+------------
+
+https://docs.djangoproject.com/en/1.3/
+
+
+------------
+DEVELOPEMENT
+------------
+
+Install django libs on ubuntu:
+
+  sudo aptitude install python-django
+
+Got to codadmin folder
+
+* First time :
+   python manager.py syncdb
+
+Run web server
+  python manager.py runserver 0.0.0.0:8000
+
+
+Happy hacking
