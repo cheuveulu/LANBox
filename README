@@ -31,4 +31,11 @@ Run web server
    python manager.py runserver 0.0.0.0:8000
 
 
+--------------
+Usage
+--------------
+Admin url
+http://IP/admin
+
+
 Happy hacking
