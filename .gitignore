@@ -1,5 +1,6 @@
 build
 Session.vim
 *.pyc
-codadmin.db
 .*.sw*
+codadmin/codadmin.db
+codadmin/media/*

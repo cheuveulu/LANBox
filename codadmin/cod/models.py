@@ -1,6 +1,6 @@
 
 from django.db import models
-import psutil, subprocess, shlex, os
+import subprocess, shlex, os, time
 
 
 # Linux user who will run the game server
@@ -46,9 +46,18 @@ class Server(models.Model):
 
     # Get pid of running server and check if server is still running
     def getpid(self, out = False):
-        if not psutil.pid_exists(self.pid) or self.pid == 0:
+        if self.pid == 0:
+            return None
+
+        try:
+            # We send a 0 signal to the process to check if he is still running
+            # This will fail if the process is not running or we cannot send signal to it.
+            os.kill(self.pid, 0)
+        except OSError:
+            # The process doesn't exists anymore
             self.write_pid(0)
             return None
+
         return self.pid
       
     def write_pid(self, pid):
@@ -65,7 +74,9 @@ class Server(models.Model):
         else:
             
             cmd = ""
-            cmd += "sudo -u " + self.user.name
+            # Run the command with sudo for the user.
+            # -H is to set home of the target user.
+            cmd += "sudo -H -u " + self.user.name
             cmd += " " 
             cmd += self.game.path + '/'
             cmd += self.game.binary + " "
@@ -86,11 +97,33 @@ class Server(models.Model):
             print cmd
             split_cmd = shlex.split(str(cmd))
             print str(split_cmd)
-            os.chdir(self.game.path)
-            p = subprocess.Popen(split_cmd, cwd = self.game.path)
-            self.write_pid(p.pid)
+            self.run_and_exit(split_cmd, self.game.path)
             return "Server Started"
 
+    # Fork and run the screen process so it can detach from our main process.
+    # This is for daemonizing the screen process.
+    def run_and_exit(self, cmd, path):
+        try:
+            pid = os.fork()
+        except OSError , e:
+            raise Exception, "%s [%d]" % (e.strerror, e.errno)
+        
+        if pid == 0:
+            # We are the first child
+            os.setsid()
+            
+            p = subprocess.Popen(cmd, cwd = path)
+            self.write_pid(p.pid)
+
+            os._exit(0)
+
+        else:
+            #We are the parent
+            # Wait for the child to save pid to db and exit
+            os.wait()
+            self.pid = Server.objects.get(id=self.id).pid
+            return self.pid
+            
 
     def resume(self):
         pid = self.getpid()
@@ -125,6 +158,7 @@ quit
             final_cmd = shlex.split(cmd)
             final_cmd.append(screen_cmd)
             p = subprocess.Popen(final_cmd, universal_newlines=True)
+            p.wait()
             return True
          
     def restart(self):

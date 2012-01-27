@@ -43,6 +43,7 @@ a
 .ajax-loading
 {
     background-image: url("/static/images/ajax-loading.gif");
+    background-position: 3px 3px;
 }
 
 
