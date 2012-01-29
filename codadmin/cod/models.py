@@ -85,10 +85,10 @@ class Server(models.Model):
             if self.fs_game != "":
                 cmd += "+set fs_game 'Mods/"+ str(self.fs_game) + "' "
             
-            cmd += "+exec " + str(self.config_file) + " "
+            cmd += "+exec config/" + str(self.config_file) + " "
             cmd += "+set net_ip " + str(self.ip )+ " "
             cmd += "+set net_port " + str(self.port) + " "
-            url = 'http://' + str(self.ip) + "/" + self.game.nick
+            url = 'http://' + str(self.ip) + "/dl/" + self.game.nick
             cmd += "+seta sv_wwwbaseurl " + '\\\"' + url + '\\\"' + " "
             cmd += "+map_rotate"
             
