@@ -2,6 +2,7 @@
 from django.db import models
 import subprocess, shlex, os, time
 
+from util import get_ip_address
 
 # Linux user who will run the game server
 class SysUser(models.Model):
@@ -16,7 +17,8 @@ class SysUser(models.Model):
 class Game(models.Model):
     name = models.CharField(max_length=64)
     path = models.CharField(max_length=255)
-    icon = models.ImageField(upload_to='icons/', null=True)
+    # Optional field , null and blank have to be set and db altered
+    icon = models.ImageField(upload_to='icons/', null=True, blank=True)
     binary = models.CharField(max_length=64)
     nick = models.CharField(max_length=16)
 
@@ -28,21 +30,26 @@ class Server(models.Model):
     name = models.CharField(max_length=64)
     game = models.ForeignKey(Game)
     user = models.ForeignKey(SysUser)
-    ip = models.IPAddressField(null=True)
-    port  = models.IntegerField()
+    ip = models.IPAddressField(null=True, blank=True)
+    port  = models.IntegerField(null=True, blank=True)
     config_file = models.CharField(max_length=64)
-    fs_game = models.CharField(max_length=64, null=True)
+    fs_game = models.CharField(max_length=64, null=True, blank=True)
     onboot = models.BooleanField()
     protected = models.BooleanField()
-    pid = models.PositiveSmallIntegerField(null=True)
-    password = models.CharField(max_length=64, null=True)
-    rcon_password = models.CharField(max_length=64, null=True)
+    pid = models.PositiveSmallIntegerField(null=True, blank=True)
+    password = models.CharField(max_length=64, null=True, blank=True)
+    rcon_password = models.CharField(max_length=64, null=True, blank=True)
 
     screen_path = '/usr/bin/screen'
 
     def __unicode__(self):
         return self.game.name + " : " + self.name
 
+    def get_ip(self):
+        if self.ip == '':
+            return get_ip_address()
+        else:
+            return self.ip
 
     # Get pid of running server and check if server is still running
     def getpid(self, out = False):
@@ -81,14 +88,15 @@ class Server(models.Model):
             cmd += self.game.path + '/'
             cmd += self.game.binary + " "
             
+            # dedicated 1 = LAN, 2 = internet
             cmd += "+set dedicated 1 "
             if self.fs_game != "":
                 cmd += "+set fs_game 'Mods/"+ str(self.fs_game) + "' "
             
             cmd += "+exec config/" + str(self.config_file) + " "
-            cmd += "+set net_ip " + str(self.ip )+ " "
+            cmd += "+set net_ip " + str(self.get_ip() )+ " "
             cmd += "+set net_port " + str(self.port) + " "
-            url = 'http://' + str(self.ip) + "/dl/" + self.game.nick
+            url = 'http://' + str(self.get_ip()) + "/dl/" + self.game.nick
             cmd += "+seta sv_wwwbaseurl " + '\\\"' + url + '\\\"' + " "
             cmd += "+map_rotate"
             
